@@ -1,5 +1,6 @@
 package org.example;
 
+import org.apache.http.NameValuePair;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,6 +57,26 @@ public class Server {
         int httpParts = 3;
         final var requestLine = in.readLine();
         final var parts = requestLine.split(" ");
+
+        // Функциональность по обработке параметров из Query
+
+        Request request = new Request(requestLine);
+
+        System.out.println("User request: " + request.getRequest());
+        System.out.println("Requested path: " + request.getPath());
+
+        List<NameValuePair> nameValuePairList = request.getNameValueParams();
+
+        System.out.println("Webpage query parameters values:");
+        for (NameValuePair nameValuePair : nameValuePairList) {
+            System.out.println(nameValuePair);
+        }
+
+        System.out.println("Parameter value: " + request.getQueryParam("param1")); // value = first;
+        System.out.println("Parameter value: " + request.getQueryParam("param3")); // value = null;
+
+        System.out.println("HTTP method: " + request.getHttpMethod());
+        System.out.println("HTTP version: " + request.getHttpVersion());
 
         if (parts.length != httpParts) {
             return;
